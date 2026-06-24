@@ -18,8 +18,7 @@ export function useApiData<T>(fetcher: (token: string) => Promise<T>) {
         setError(err instanceof ApiError ? err.message : "Failed to load data"),
       )
       .finally(() => setIsLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken]);
+  }, [accessToken, fetcher]);
 
   useEffect(() => {
     reload();
