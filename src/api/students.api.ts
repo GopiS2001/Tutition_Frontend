@@ -68,8 +68,13 @@ export interface UpdateStudentInput {
   guardian?: StudentGuardianInput;
 }
 
-export function listStudents(token: string) {
-  return apiRequest<Student[]>("/students", { token });
+export interface StudentListParams {
+  class?: string;
+}
+
+export function listStudents(token: string, params?: StudentListParams) {
+  const query = params?.class ? `?class=${encodeURIComponent(params.class)}` : "";
+  return apiRequest<Student[]>(`/students${query}`, { token });
 }
 
 export function createStudent(token: string, input: CreateStudentInput) {
