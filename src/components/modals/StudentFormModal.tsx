@@ -21,17 +21,22 @@ const CLASS_OPTIONS = Array.from({ length: 12 }, (_, i) => ({
   label: `Class ${i + 1}`,
 }));
 
-const emptyForm: CreateStudentInput = {
-  name: "",
-  class: "1",
-  section: "A",
-  batch_id: "",
-  academic_year: "2024-25",
-  guardian: { primary_mobile: "" },
-};
+function buildEmptyForm(defaultClass?: string): CreateStudentInput {
+  return {
+    name: "",
+    class: defaultClass ?? "1",
+    section: "A",
+    batch_id: "",
+    academic_year: "2024-25",
+    guardian: { primary_mobile: "" },
+  };
+}
 
-function buildFormFromStudent(student?: Student | null): CreateStudentInput {
-  if (!student) return emptyForm;
+function buildFormFromStudent(
+  student: Student | null | undefined,
+  defaultClass?: string,
+): CreateStudentInput {
+  if (!student) return buildEmptyForm(defaultClass);
   return {
     name: student.name,
     dob: student.dob,
