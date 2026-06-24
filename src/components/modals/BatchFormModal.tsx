@@ -64,6 +64,15 @@ export default function BatchFormModal({ isOpen, onClose, onSaved, batch }: Batc
   const [form, setForm] = useState<BatchInput>(() => buildFormFromBatch(batch));
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [wasOpen, setWasOpen] = useState(isOpen);
+
+  if (isOpen && !wasOpen) {
+    setWasOpen(true);
+    setForm(buildFormFromBatch(batch));
+    setError(null);
+  } else if (!isOpen && wasOpen) {
+    setWasOpen(false);
+  }
 
   function set<K extends keyof BatchInput>(key: K, value: BatchInput[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
