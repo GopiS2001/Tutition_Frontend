@@ -162,6 +162,7 @@ const StudentsTable = forwardRef<TableHandle, StudentsTableProps>(function Stude
         onClose={() => setIsModalOpen(false)}
         onSaved={reload}
         student={editingStudent}
+        defaultClass={classFilter}
       />
     </div>
   );
