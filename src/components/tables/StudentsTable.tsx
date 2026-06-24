@@ -14,9 +14,20 @@ function batchLabel(student: Student) {
   return student.batch_id?.name ?? student.batch_timing;
 }
 
-const StudentsTable = forwardRef<TableHandle>(function StudentsTable(_props, ref) {
+interface StudentsTableProps {
+  classFilter?: string;
+}
+
+const StudentsTable = forwardRef<TableHandle, StudentsTableProps>(function StudentsTable(
+  { classFilter },
+  ref,
+) {
   const { accessToken } = useAuth();
-  const { data: students, isLoading, error, reload } = useApiData(listStudents);
+  const fetcher = useCallback(
+    (token: string) => listStudents(token, classFilter ? { class: classFilter } : undefined),
+    [classFilter],
+  );
+  const { data: students, isLoading, error, reload } = useApiData(fetcher);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
