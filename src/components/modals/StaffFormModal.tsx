@@ -62,6 +62,15 @@ export default function StaffFormModal({ isOpen, onClose, onSaved, staff }: Staf
   const [form, setForm] = useState<StaffForm>(() => buildFormFromStaff(staff));
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [wasOpen, setWasOpen] = useState(isOpen);
+
+  if (isOpen && !wasOpen) {
+    setWasOpen(true);
+    setForm(buildFormFromStaff(staff));
+    setError(null);
+  } else if (!isOpen && wasOpen) {
+    setWasOpen(false);
+  }
 
   function set<K extends keyof StaffForm>(key: K, value: StaffForm[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
