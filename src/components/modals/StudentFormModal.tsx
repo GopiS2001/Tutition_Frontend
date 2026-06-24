@@ -58,6 +58,7 @@ interface StudentFormModalProps {
   onClose: () => void;
   onSaved: () => void;
   student?: Student | null;
+  defaultClass?: string;
 }
 
 export default function StudentFormModal({
@@ -65,12 +66,24 @@ export default function StudentFormModal({
   onClose,
   onSaved,
   student,
+  defaultClass,
 }: StudentFormModalProps) {
   const { accessToken } = useAuth();
   const { data: batches } = useApiData(listBatches);
-  const [form, setForm] = useState<CreateStudentInput>(() => buildFormFromStudent(student));
+  const [form, setForm] = useState<CreateStudentInput>(() =>
+    buildFormFromStudent(student, defaultClass),
+  );
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [wasOpen, setWasOpen] = useState(isOpen);
+
+  if (isOpen && !wasOpen) {
+    setWasOpen(true);
+    setForm(buildFormFromStudent(student, defaultClass));
+    setError(null);
+  } else if (!isOpen && wasOpen) {
+    setWasOpen(false);
+  }
 
   function set<K extends keyof CreateStudentInput>(key: K, value: CreateStudentInput[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
